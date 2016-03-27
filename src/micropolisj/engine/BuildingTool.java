@@ -48,6 +48,10 @@ class BuildingTool extends ToolStroke
 
 		case NUCLEAR:
 			return applyZone(eff, NUCLEAR);
+			
+		case WINDTURBINE:
+			System.out.println("Building tool.apply1()");
+			return applyZone(eff, WINDTURBINE);
 
 		case AIRPORT:
 			return applyZone(eff, AIRPORT);

@@ -28,6 +28,7 @@ public enum MicropolisTool
 	SEAPORT(4, 3000),
 	POWERPLANT(4, 3000),
 	NUCLEAR(4, 5000),
+	WINDTURBINE(4,5000),
 	AIRPORT(6, 10000),
 	QUERY(1, 0);
 

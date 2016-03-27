@@ -1,7 +1,7 @@
 # This file is part of MicropolisJ.
 # Copyright (C) 2013 Jason Long
 # Portions Copyright (C) 1989-2007 Electronic Arts Inc.
-#
+#THIS FILE IS UNDER GRAPHICS
 # MicropolisJ is free software; you can redistribute it and/or modify
 # it under the terms of the GNU GPLv3, with additional terms.
 # See the README file, included in this distribution, for details.
@@ -1009,3 +1009,20 @@
 957   misc_animation@0,2080
 958   misc_animation@0,2096
 959   misc_animation@0,2112
+# BEGIN WIND TURBINE POWER #
+960   windturbine@0,0            (conducts)
+961   windturbine@16,0           (conducts)
+962   windturbine@32,0           (conducts)
+963   windturbine@48,0           (conducts)
+964   windturbine@0,16           (conducts)
+965   windturbine@16,16    (zone)(conducts)(building=4x4)(behavior=NUCLEAR)(description=#19)
+966   windturbine@32,16          (conducts)
+967   windturbine@48,16          (conducts)
+968   windturbine@0,32           (conducts)
+969   windturbine@16,32          (conducts)  (onpower=952)
+970   windturbine@32,32          (conducts)
+971   windturbine@48,32          (conducts)
+972   windturbine@0,48           (conducts)
+973   windturbine@16,48          (conducts)
+974   windturbine@32,48          (conducts)
+975   windturbine@48,48          (conducts)
