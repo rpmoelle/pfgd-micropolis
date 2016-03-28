@@ -123,6 +123,7 @@ public class Micropolis
 	int stadiumCount;
 	int coalCount;
 	int nuclearCount;
+	int windturbineCount;
 	int seaportCount;
 	int airportCount;
 
@@ -536,6 +537,7 @@ public class Micropolis
 		stadiumCount = 0;
 		coalCount = 0;
 		nuclearCount = 0;
+		windturbineCount = 0;
 		seaportCount = 0;
 		airportCount = 0;
 		powerPlants.clear();
@@ -1034,7 +1036,7 @@ public class Micropolis
 		// A windturbine with no bonuses counts as 1
 		// A windturbine within 10 tiles of water gets a .5 bonus
 		// A windturbine beyond 10 tiles of gets a .5 bonus
-		int maxPower = coalCount * 700 + nuclearCount * 2000;
+		int maxPower = coalCount * 700 + nuclearCount * 2000 + windturbineCount *2000;
 		int numPower = 0;
 
 		// This is kind of odd algorithm, but I haven't the heart to rewrite it at
@@ -2103,6 +2105,7 @@ public class Micropolis
 	{
 		coalCount = 0;
 		nuclearCount = 0;
+		windturbineCount = 0;
 
 		powerPlants.clear();
 		for (int y = 0; y < map.length; y++) {
@@ -2110,6 +2113,12 @@ public class Micropolis
 				int tile = getTile(x,y);
 				if (tile == NUCLEAR) {
 					nuclearCount++;
+					powerPlants.add(new CityLocation(x,y));
+				}
+				else if (tile == WINDTURBINE) {
+					//Check for windturbine bonuses not here!
+					//This check how many plants, that count is wonky
+					windturbineCount++;
 					powerPlants.add(new CityLocation(x,y));
 				}
 				else if (tile == POWERPLANT) {
@@ -2532,7 +2541,7 @@ public class Micropolis
 		checkGrowth();
 
 		int totalZoneCount = resZoneCount + comZoneCount + indZoneCount;
-		int powerCount = nuclearCount + coalCount;
+		int powerCount = nuclearCount + coalCount + windturbineCount;
 
 		int z = cityTime % 64;
 		switch (z) {

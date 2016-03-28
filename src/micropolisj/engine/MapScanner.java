@@ -92,7 +92,7 @@ class MapScanner extends TileBehavior
 			assert false;
 		}
 	}
-
+	
 	boolean checkZonePower()
 	{
 		boolean zonePwrFlag = setZonePower();
@@ -115,6 +115,7 @@ class MapScanner extends TileBehavior
 		boolean newPower = (
 			tile == NUCLEAR ||
 			tile == POWERPLANT ||
+			tile == WINDTURBINE ||
 			city.hasPower(xpos,ypos)
 			);
 
@@ -207,16 +208,46 @@ class MapScanner extends TileBehavior
 
 		city.powerPlants.add(new CityLocation(xpos, ypos));
 	}
+	
+	void checkBonuses(){
+		//If windturbine is within 10 tiles of water, add a bonus
+		//
+		//If windturbine is within 10 tile radius of city,
+		//do not add bonus
+		//else, add bonus
+		//
+		boolean foundWater = false;
+		boolean foundOtherBuilding = false;
+		//get tile
+		//get [] of all tiles within a 10 tile radius
+		//loop thru tile[]
+		//if water && !foundWater, add bonus, set foundWater = true;
+		//Can tell it is water by tile number?
+		//if otherbuilding && !foundOtherBuilding, set foundOtherBuilding = true;
+		//end loop
+		//if !foundOtherBuilding, add bonus
+		//city.windturbineCount = city.windturbineCount * 2;
+	}
+	
 	void doWindTurbinePower()
 	{
+		//Questions:
+		//1.How to access the tile from this point in the code? There are no references to a tile up the code
+		//2.How to grab nearby tiles? See findperimeterroad()?
 		boolean powerOn = checkZonePower();
 		if (!city.noDisasters && PRNG.nextInt(Micropolis.MltdwnTab[city.gameLevel]+1) == 0) {
 			//Wind Turbines do not have nuclear meltdowns
 			//city.doMeltdown(xpos, ypos);
 			//return;
 		}
-
-		city.nuclearCount++; //change this to windturbine count
+		// Windturbines count for 1, 2, or 4 power sources depending on bonuses
+				// A windturbine with no bonuses counts as 1
+				// A windturbine within 10 tiles of water gets a x2 bonus
+				// A windturbine beyond 10 tiles of gets a x2 bonus
+		city.windturbineCount++;//This counts as at least one power source. Must be added before
+		//checking bonuses in case this is the only power plant (avoid 0*2)
+		checkBonuses();
+		
 		if ((city.cityTime % 8) == 0) {
 			repairZone(WINDTURBINE, 4);
 		}
