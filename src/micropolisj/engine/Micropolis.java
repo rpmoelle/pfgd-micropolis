@@ -1030,7 +1030,10 @@ public class Micropolis
 		// Note: brownouts are based on total number of power plants, not the number
 		// of powerplants connected to your city.
 		//
-
+		// Windturbines count for 1, 1.5, or 2 power sources depending on bonuses
+		// A windturbine with no bonuses counts as 1
+		// A windturbine within 10 tiles of water gets a .5 bonus
+		// A windturbine beyond 10 tiles of gets a .5 bonus
 		int maxPower = coalCount * 700 + nuclearCount * 2000;
 		int numPower = 0;
 
@@ -1160,6 +1163,10 @@ public class Micropolis
 					for (int my = zy; my <= zy+1; my++)
 					{
 						int tile = getTile(mx, my);
+						//Adjust for windturbine?
+						if (tile < WINDTURBINE){
+							landValueTotal += 100;
+						}
 						if (tile != DIRT)
 						{
 							if (tile < RUBBLE) //natural land features
@@ -1461,6 +1468,7 @@ public class Micropolis
 		bb.put("INDUSTRIAL", new MapScanner(this, MapScanner.B.INDUSTRIAL));
 		bb.put("COAL", new MapScanner(this, MapScanner.B.COAL));
 		bb.put("NUCLEAR", new MapScanner(this, MapScanner.B.NUCLEAR));
+		bb.put("WINDTURBINE", new MapScanner(this, MapScanner.B.WINDTURBINE));
 		bb.put("FIRESTATION", new MapScanner(this, MapScanner.B.FIRESTATION));
 		bb.put("POLICESTATION", new MapScanner(this, MapScanner.B.POLICESTATION));
 		bb.put("STADIUM_EMPTY", new MapScanner(this, MapScanner.B.STADIUM_EMPTY));
@@ -2216,6 +2224,11 @@ public class Micropolis
 			{
 				char tilevalue = map[y][x];
 				TileSpec spec = Tiles.get(tilevalue & LOMASK);
+				//If its a windturbine, don't animate
+				/*if(spec.get(tileNumber) >= 960 && spec.get(tileNumber)<= 975){
+					System.out.println("DONT ANIMATE 2");
+					break;
+				}*/
 				if (spec != null && spec.animNext != null) {
 					int flags = tilevalue & ALLBITS;
 					setTile(x, y, (char)

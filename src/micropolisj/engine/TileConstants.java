@@ -258,7 +258,12 @@ public class TileConstants
 	{
 		assert (tile & LOMASK) == tile;
 
-		TileSpec spec = Tiles.get(tile);
+		TileSpec spec = Tiles.get(tile);//
+		//If its a windturbine, don't animate
+		if(tile >= 960 && tile<= 975){
+			System.out.println("DONT ANIMATE" + tile);
+			return false;
+		}
 		return spec != null && spec.animNext != null;
 	}
 

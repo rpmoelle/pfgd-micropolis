@@ -36,6 +36,7 @@ class MapScanner extends TileBehavior
 		INDUSTRIAL,
 		COAL,
 		NUCLEAR,
+		WINDTURBINE,
 		FIRESTATION,
 		POLICESTATION,
 		STADIUM_EMPTY,
@@ -65,6 +66,9 @@ class MapScanner extends TileBehavior
 			return;
 		case NUCLEAR:
 			doNuclearPower();
+			return;
+		case WINDTURBINE:
+			doWindTurbinePower();
 			return;
 		case FIRESTATION:
 			doFireStation();
@@ -105,7 +109,7 @@ class MapScanner extends TileBehavior
 		return zonePwrFlag;
 	}
 
-	boolean setZonePower()
+	boolean setZonePower()//windturbine change here
 	{
 		boolean oldPower = city.isTilePowered(xpos, ypos);
 		boolean newPower = (
@@ -203,7 +207,22 @@ class MapScanner extends TileBehavior
 
 		city.powerPlants.add(new CityLocation(xpos, ypos));
 	}
+	void doWindTurbinePower()
+	{
+		boolean powerOn = checkZonePower();
+		if (!city.noDisasters && PRNG.nextInt(Micropolis.MltdwnTab[city.gameLevel]+1) == 0) {
+			//Wind Turbines do not have nuclear meltdowns
+			//city.doMeltdown(xpos, ypos);
+			//return;
+		}
 
+		city.nuclearCount++; //change this to windturbine count
+		if ((city.cityTime % 8) == 0) {
+			repairZone(WINDTURBINE, 4);
+		}
+		//Set land value of surrounding areas to 250 (see ptlscan())
+		city.powerPlants.add(new CityLocation(xpos, ypos));
+	}
 	void doFireStation()
 	{
 		boolean powerOn = checkZonePower();
@@ -385,6 +404,12 @@ class MapScanner extends TileBehavior
 	{
 		// from the given center tile, figure out what the
 		// northwest tile should be
+		
+		//If a wind turbine, do not animate
+		//This is whats working!
+		if(zoneCenter < 960){
+			return;	
+		}
 		int zoneBase = zoneCenter - 1 - zoneSize;
 
 		for (int y = 0; y < zoneSize; y++)
@@ -401,8 +426,9 @@ class MapScanner extends TileBehavior
 						continue;
 					}
 
-					if (isAnimated(thCh))
-						continue;
+					if (isAnimated(thCh)){
+						System.out.println(thCh + " " + isAnimated(thCh));
+						continue;}
 
 					if (!isIndestructible(thCh))
 					{  //not rubble, radiactive, on fire or flooded
