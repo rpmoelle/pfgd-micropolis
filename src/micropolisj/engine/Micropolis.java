@@ -1165,7 +1165,7 @@ public class Micropolis
 					for (int my = zy; my <= zy+1; my++)
 					{
 						int tile = getTile(mx, my);
-						//Adjust for windturbine?
+						//Adjusted for windturbine
 						if (tile < WINDTURBINE){
 							landValueTotal += 100;
 						}
