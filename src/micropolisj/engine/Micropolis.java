@@ -968,6 +968,7 @@ public class Micropolis
 			rv = (
 				isConductive(t) &&
 				t != NUCLEAR &&
+				t != WINDTURBINE &&
 				t != POWERPLANT &&
 				!hasPower(loc.x, loc.y)
 				);
@@ -1496,11 +1497,13 @@ public class Micropolis
 	{
 		int tile = getTile(xpos, ypos);
 		String behaviorStr = getTileBehavior(tile);
+		//System.out.println(behaviorStr);
 		if (behaviorStr == null) {
 			return; //nothing to do
 		}
 
 		TileBehavior b = tileBehaviors.get(behaviorStr);
+		System.out.println(behaviorStr);
 		if (b != null) {
 			b.processTile(xpos, ypos);
 		}

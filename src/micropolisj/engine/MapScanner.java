@@ -209,25 +209,100 @@ class MapScanner extends TileBehavior
 		city.powerPlants.add(new CityLocation(xpos, ypos));
 	}
 	
-	void checkBonuses(){
+	boolean isWater(int tile){
+		//returns true if the given tile ID number is water
+		if(tile > 1 && tile < 21)
+		{
+			//water range
+			System.out.println("hit water");
+			return true;
+		}
+		return false;
+	}
+	
+	boolean isBuilding(int tile){
+		//returns true if the given tile ID number is a building
+		//ignores windturbine tiles
+		System.out.println("FOUND " + tile);
+		if(tile > 64 && tile < 208){
+			//excluding terrain and wires
+			System.out.println("1");
+			return true;
+		}
+		if(tile > 223 && tile < 828){
+			//excluding bridges
+			System.out.println("2");
+			return true;
+		}
+		if(tile > 831 && tile < 948){
+			System.out.println("3");
+			return true;
+		}
+		return false;
+	}
+	
+	int checkBonuses(){
+		//This counts as at least one power source. Must be added before
+		//checking bonuses in case this is the only power plant (avoid 0*2)
+		int turb = 1;
 		//If windturbine is within 10 tiles of water, add a bonus
 		//
-		//If windturbine is within 10 tile radius of city,
+		//If windturbine is within 10 tile 4 directional radius of city,
 		//do not add bonus
 		//else, add bonus
 		//
 		boolean foundWater = false;
 		boolean foundOtherBuilding = false;
-		//get tile
-		//get [] of all tiles within a 10 tile radius
-		//loop thru tile[]
-		//if water && !foundWater, add bonus, set foundWater = true;
-		//Can tell it is water by tile number?
-		//if otherbuilding && !foundOtherBuilding, set foundOtherBuilding = true;
-		//end loop
-		//if !foundOtherBuilding, add bonus
-		//city.windturbineCount = city.windturbineCount * 2;
+		//get tile integer value
+		int plant = city.getTile(xpos, ypos);
+		//check of all tiles within a 10 tile radius, using as few loops as possible
+		//I'm thinking of this as a 21x21 square with the power plant in the center
+		//char[] plantRadial;
+		for(int row = xpos-10; row < xpos + 10; row++){
+			for(int col = ypos-10; col < ypos + 10; col++){
+				//if this is the power plant in the middle, don't add it to the list of tiles to check
+				if(row==xpos && col==ypos){
+					//do nothing!
+				}
+				else{
+					//get the tile's int ID
+					int currentTile = city.getTile(row, col);
+					//Check for water
+					if(!foundWater && isWater(currentTile))
+					{
+						//if you havent found water and this tile is water
+						//add the water bonus
+						foundWater = true;
+						//turb = turb*2;
+					}
+					//Check for building
+					if(row == xpos || col == ypos){
+						//if we're in the same row and the central power plant
+						//or we are in the same column, check for a building
+						if(!foundOtherBuilding && isBuilding(currentTile))
+							{
+							//if you havent found another building and this is a building
+							//mark it
+							foundOtherBuilding = true;
+							System.out.println("found another building" + currentTile);
+							}
+					}
+				}
+			}
+			}
+		//add in bonuses
+		if(foundWater){
+			turb = turb*2;
+			System.out.println("I found water");
+		}
+		if(!foundOtherBuilding){
+			turb = turb*2;
+			System.out.println("I found no building");
+		}
+		System.out.println("turb is" + turb);
+		return turb;
 	}
+	
 	
 	void doWindTurbinePower()
 	{
@@ -244,10 +319,9 @@ class MapScanner extends TileBehavior
 				// A windturbine with no bonuses counts as 1
 				// A windturbine within 10 tiles of water gets a x2 bonus
 				// A windturbine beyond 10 tiles of gets a x2 bonus
-		city.windturbineCount++;//This counts as at least one power source. Must be added before
+		//This counts as at least one power source. Must be added before
 		//checking bonuses in case this is the only power plant (avoid 0*2)
-		checkBonuses();
-		
+		city.windturbineCount = city.windturbineCount + checkBonuses();
 		if ((city.cityTime % 8) == 0) {
 			repairZone(WINDTURBINE, 4);
 		}
@@ -453,6 +527,7 @@ class MapScanner extends TileBehavior
 				if (city.testBounds(xx, yy))
 				{
 					int thCh = city.getTile(xx, yy);
+					System.out.println("thCh is" + thCh);
 					if (isZoneCenter(thCh)) {
 						continue;
 					}
