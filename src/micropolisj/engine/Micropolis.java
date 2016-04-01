@@ -1037,6 +1037,7 @@ public class Micropolis
 		// A windturbine with no bonuses counts as 1
 		// A windturbine within 10 tiles of water gets a .5 bonus
 		// A windturbine beyond 10 tiles of gets a .5 bonus
+		System.out.println("wturb count is" + windturbineCount);
 		int maxPower = coalCount * 700 + nuclearCount * 2000 + windturbineCount *2000;
 		int numPower = 0;
 
