@@ -214,7 +214,7 @@ class MapScanner extends TileBehavior
 		if(tile > 1 && tile < 21)
 		{
 			//water range
-			System.out.println("hit water");
+			//System.out.println("hit water");
 			return true;
 		}
 		return false;
@@ -223,19 +223,19 @@ class MapScanner extends TileBehavior
 	boolean isBuilding(int tile){
 		//returns true if the given tile ID number is a building
 		//ignores windturbine tiles
-		System.out.println("FOUND " + tile);
+		//System.out.println("FOUND " + tile);
 		if(tile > 64 && tile < 208){
 			//excluding terrain and wires
-			System.out.println("1");
+			//System.out.println("1");
 			return true;
 		}
 		if(tile > 223 && tile < 828){
 			//excluding bridges
-			System.out.println("2");
+			//System.out.println("2");
 			return true;
 		}
 		if(tile > 831 && tile < 948){
-			System.out.println("3");
+			//System.out.println("3");
 			return true;
 		}
 		return false;
@@ -258,11 +258,18 @@ class MapScanner extends TileBehavior
 		//check of all tiles within a 10 tile radius, using as few loops as possible
 		//I'm thinking of this as a 21x21 square with the power plant in the center
 		//char[] plantRadial;
+		//check to make sure you dont hit the bounds of the map
+		//does Micropolis.java->testBounds(x,y) do this? has no comments
 		for(int row = xpos-10; row < xpos + 10; row++){
 			for(int col = ypos-10; col < ypos + 10; col++){
 				//if this is the power plant in the middle, don't add it to the list of tiles to check
 				if(row==xpos && col==ypos){
 					//do nothing!
+				}
+				else if(!city.testBounds(row,col)){
+					//check to make sure you dont hit the bounds of the map
+					//does Micropolis.java->testBounds(x,y) do this? has no comments
+					//if it is out of bounds, do nothing!
 				}
 				else{
 					//get the tile's int ID
@@ -284,7 +291,7 @@ class MapScanner extends TileBehavior
 							//if you havent found another building and this is a building
 							//mark it
 							foundOtherBuilding = true;
-							System.out.println("found another building" + currentTile);
+							//System.out.println("found another building" + currentTile);
 							}
 					}
 				}
@@ -293,11 +300,11 @@ class MapScanner extends TileBehavior
 		//add in bonuses
 		if(foundWater){
 			turb = turb*2;
-			System.out.println("I found water");
+			//System.out.println("I found water");
 		}
 		if(!foundOtherBuilding){
 			turb = turb*2;
-			System.out.println("I found no building");
+			//System.out.println("I found no building");
 		}
 		System.out.println("turb is" + turb);
 		return turb;
@@ -533,7 +540,7 @@ class MapScanner extends TileBehavior
 					}
 
 					if (isAnimated(thCh)){
-						System.out.println(thCh + " " + isAnimated(thCh));
+						//System.out.println(thCh + " " + isAnimated(thCh));
 						continue;}
 
 					if (!isIndestructible(thCh))
