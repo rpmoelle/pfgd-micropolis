@@ -1168,8 +1168,9 @@ public class Micropolis
 					{
 						int tile = getTile(mx, my);
 						//Adjusted for windturbine
-						if (tile < WINDTURBINE){
-							landValueTotal += 100;
+						if (tile == WINDTURBINE){
+							//System.out.println("LANDVAL CAL");
+							landValueTotal += 200;
 						}
 						if (tile != DIRT)
 						{
